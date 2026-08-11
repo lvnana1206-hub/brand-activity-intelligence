@@ -1,0 +1,14 @@
+# Playwright MCP 安装包（太大）
+.playwright-mcp/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# 临时文件
+tmp_*.csv
+*.tmp
