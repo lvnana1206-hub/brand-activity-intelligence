@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Q2 线下活动经营复盘</title>
+<style>
+:root {
+  --bg: #f5f6f8;
+  --card-bg: #ffffff;
+  --text: #1a1a2e;
+  --text-sub: #6b7280;
+  --border: #e5e7eb;
+  --accent: #2563eb;
+  --accent-light: #dbeafe;
+  --green: #10b981;
+  --orange: #f59e0b;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  --radius: 8px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 0;
+}
+.container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+  color: white;
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+.header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.header-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 12px; font-size: 14px; opacity: 0.9; }
+.header-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.header-meta .num { font-weight: 700; font-size: 18px; }
+
+/* Filter */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  background: var(--card-bg);
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.filter-label { font-size: 14px; font-weight: 600; color: var(--text-sub); white-space: nowrap; }
+.filter-group { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.filter-btn {
+  padding: 8px 20px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-sub);
+  transition: all 0.2s;
+  border-right: 1px solid var(--border);
+}
+.filter-btn:last-child { border-right: none; }
+.filter-btn.active { background: var(--accent); color: white; }
+.filter-btn:hover:not(.active) { background: var(--accent-light); }
+
+/* Section */
+.section {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::before {
+  content: "";
+  width: 4px;
+  height: 20px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.section-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 16px; }
+
+/* KPI Grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent);
+}
+.kpi-card:nth-child(1)::before { background: #2563eb; }
+.kpi-card:nth-child(2)::before { background: #10b981; }
+.kpi-card:nth-child(3)::before { background: #f59e0b; }
+.kpi-card:nth-child(4)::before { background: #8b5cf6; }
+.kpi-card:nth-child(5)::before { background: #ef4444; }
+.kpi-card:nth-child(6)::before { background: #06b6d4; }
+.kpi-card:nth-child(7)::before { background: #ec4899; }
+.kpi-card:nth-child(8)::before { background: #84cc16; }
+.kpi-label { font-size: 13px; color: var(--text-sub); margin-bottom: 8px; }
+.kpi-value { font-size: 28px; font-weight: 700; }
+.kpi-unit { font-size: 14px; color: var(--text-sub); margin-left: 4px; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--text-sub);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tr:hover td { background: #f9fafb; }
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+.rank { font-weight: 700; color: var(--accent); }
+.rank-1 { color: #f59e0b; font-size: 15px; }
+.rank-2 { color: #9ca3af; font-size: 15px; }
+.rank-3 { color: #cd7f32; font-size: 15px; }
+
+/* Monthly cards */
+.monthly-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+.month-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+.month-card h4 { font-size: 16px; margin-bottom: 12px; }
+.month-stat { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+.month-stat span:first-child { color: var(--text-sub); }
+.month-stat span:last-child { font-weight: 600; }
+
+/* Bar chart */
+.bar-chart { margin: 8px 0; }
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.bar-label { width: 120px; font-size: 13px; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { flex: 1; height: 24px; background: #f3f4f6; border-radius: 4px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: white; font-size: 12px; font-weight: 600; min-width: 30px; transition: width 0.5s; }
+.bar-value { width: 80px; font-size: 13px; font-weight: 600; }
+
+/* Comparison cards */
+.compare-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; }
+.compare-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.compare-card h4 { font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.compare-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+.compare-stat:last-child { border-bottom: none; }
+.compare-stat span:first-child { color: var(--text-sub); }
+.compare-stat span:last-child { font-weight: 600; }
+
+/* Funnel */
+.funnel { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 16px 0; }
+.funnel-step {
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 600; font-size: 14px;
+  transition: width 0.5s;
+}
+.funnel-step-1 { background: #2563eb; }
+.funnel-step-2 { background: #3b82f6; }
+.funnel-step-3 { background: #60a5fa; }
+.funnel-step-4 { background: #93c5fd; color: var(--text); }
+.funnel-arrow { color: var(--text-sub); font-size: 20px; }
+.funnel-label { text-align: center; font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+
+/* Conclusion */
+.conclusion { font-size: 14px; line-height: 2; }
+.conclusion p { margin-bottom: 8px; }
+.conclusion strong { color: var(--accent); }
+
+/* Pie chart container */
+.pie-container { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.pie-legend { font-size: 13px; }
+.pie-legend-item { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.pie-legend-color { width: 12px; height: 12px; border-radius: 2px; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .monthly-grid { grid-template-columns: 1fr; }
+  .compare-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .container { padding: 12px; }
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .filter-group { width: 100%; }
+  .filter-btn { flex: 1; text-align: center; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>2026 Q2 线下活动经营复盘</h1>
+  <div class="header-meta">
+    <span>数据来源：飞书《线下活动管理》活动总池</span>
+    <span>刷新：<span id="gen-time"></span></span>
+    <span>共 <span class="num" id="total-count">0</span> 条活动</span>
+    <span>有效活动 <span class="num" id="valid-count">0</span> 条</span>
+  </div>
+</div>
+
+<!-- Filter -->
+<div class="filter-bar">
+  <span class="filter-label">渠道筛选：</span>
+  <div class="filter-group">
+    <button class="filter-btn active" onclick="switchFilter('all', this)">全部渠道</button>
+    <button class="filter-btn" onclick="switchFilter('mall', this)">Mall商</button>
+    <button class="filter-btn" onclick="switchFilter('zhao', this)">照材商</button>
+  </div>
+</div>
+
+<!-- Q2 Overview -->
+<div class="section">
+  <div class="section-title">Q2 经营总览</div>
+  <div class="section-sub">8 项核心指标</div>
+  <div class="kpi-grid" id="kpi-grid"></div>
+</div>
+
+<!-- Monthly Trends -->
+<div class="section">
+  <div class="section-title">月度趋势分析</div>
+  <div class="section-sub">4月 &rarr; 5月 &rarr; 6月</div>
+  <div class="monthly-grid" id="monthly-grid"></div>
+  <div style="margin-top:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">月度活动场次 & 销售额</div>
+    <div class="bar-chart" id="monthly-bar"></div>
+  </div>
+  <div style="margin-top:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">月度转化 & 企微蓄水</div>
+    <div class="bar-chart" id="monthly-conv-bar"></div>
+  </div>
+  <div style="margin-top:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">月度有效活动 & 无人机活动</div>
+    <div class="bar-chart" id="monthly-drone-bar"></div>
+  </div>
+</div>
+
+<!-- Funnel -->
+<div class="section">
+  <div class="section-title">活动转化漏斗</div>
+  <div class="section-sub">参与人数 &rarr; 企微添加 &rarr; 转化主机 &rarr; 有效活动</div>
+  <div class="funnel" id="funnel"></div>
+</div>
+
+<!-- Activity Type Analysis -->
+<div class="section">
+  <div class="section-title">活动类型经营分析</div>
+  <div class="section-sub">按类型拆解</div>
+  <div style="margin-top:8px;margin-bottom:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">各类型销售额对比</div>
+    <div class="bar-chart" id="type-sales-bar"></div>
+  </div>
+  <div style="margin-bottom:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">各类型活动场次占比</div>
+    <div class="bar-chart" id="type-count-bar"></div>
+  </div>
+  <div style="margin-bottom:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">活动类型月度趋势</div>
+    <table id="type-monthly-table"></table>
+  </div>
+  <div style="margin-bottom:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">各类型企微蓄水 & 有效活动率</div>
+    <table id="type-wechat-table"></table>
+  </div>
+  <div>
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">活动类型全量数据</div>
+    <table id="type-full-table"></table>
+  </div>
+</div>
+
+<!-- Product Line Analysis -->
+<div class="section">
+  <div class="section-title">产品线经营分析</div>
+  <div class="section-sub">Luna / X / Go / Ace</div>
+  <div style="margin-bottom:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">各产品线销量</div>
+    <div class="bar-chart" id="product-bar"></div>
+  </div>
+  <div style="margin-bottom:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">产品月度趋势</div>
+    <table id="product-monthly-table"></table>
+  </div>
+  <div>
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">产品 &times; 活动类型销量明细</div>
+    <table id="product-type-table"></table>
+  </div>
+</div>
+
+<!-- Agent Ranking -->
+<div class="section">
+  <div class="section-title">代理商经营排行 Top 20</div>
+  <table id="agent-table"></table>
+</div>
+
+<!-- Store Ranking -->
+<div class="section">
+  <div class="section-title">门店经营排行 Top 20</div>
+  <table id="store-table"></table>
+</div>
+
+<!-- Province Distribution -->
+<div class="section">
+  <div class="section-title">省区 & 省份分布</div>
+  <div style="margin-bottom:16px;">
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">省区销售贡献</div>
+    <div class="bar-chart" id="prov-sales-bar"></div>
+  </div>
+  <div>
+    <div style="font-weight:600;font-size:14px;margin-bottom:8px;">Top 省份活动场次</div>
+    <div class="bar-chart" id="prov-count-bar"></div>
+  </div>
+</div>
+
+<!-- Channel Comparison -->
+<div class="section">
+  <div class="section-title">渠道 & 无人机 & 异业合作对比</div>
+  <div class="compare-grid">
+    <div class="compare-card" id="mall-vs-zhao"></div>
+    <div class="compare-card" id="drone-vs-nondrone"></div>
+  </div>
+  <div class="compare-grid">
+    <div class="compare-card" id="cross-vs-normal"></div>
+    <div class="compare-card">
+      <h4>异业合作品牌排行</h4>
+      <div id="brand-ranking"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Conclusion -->
+<div class="section">
+  <div class="section-title">Q2 经营结论与 Q3 建议</div>
+  <div class="conclusion" id="conclusion"></div>
+</div>
+
+</div>
+
+<script>
+const DATA = {"all": {"overview": {"total": 1038, "valid": 652, "total_sales": 9096934.27, "total_drone_units": 67885.0, "total_participants": 70957.0, "total_wechat": 18209.0, "avg_sales": 8763.905847784199, "conversion_rate": 0.628131021194605}, "monthly": {"2026-04": {"count": 315, "valid": 186, "sales": 1097665.6, "drone_units": 1059.0, "participants": 11295.0, "wechat": 4813.0, "conversion_rate": 0.5904761904761905, "drone_activities": 155, "avg_sales": 3484.6526984126986}, "2026-05": {"count": 341, "valid": 203, "sales": 1485319.94, "drone_units": 3048.0, "participants": 41262.0, "wechat": 5710.0, "conversion_rate": 0.5953079178885631, "drone_activities": 215, "avg_sales": 4355.776950146627}, "2026-06": {"count": 382, "valid": 263, "sales": 6513948.73, "drone_units": 63778.0, "participants": 18400.0, "wechat": 7686.0, "conversion_rate": 0.6884816753926701, "drone_activities": 263, "avg_sales": 17052.221806282723}}, "type_metrics": [{"type": "无人机专项", "count": 263, "valid": 120, "valid_rate": 0.45627376425855515, "sales": 878032.29, "avg_sales": 3338.5258174904943, "drone_units": 5871.0, "wechat": 3189.0, "participants": 15280.0, "drone_activities": 240}, {"type": "异业合作", "count": 235, "valid": 136, "valid_rate": 0.5787234042553191, "sales": 714316.15, "avg_sales": 3039.643191489362, "drone_units": 284.0, "wechat": 4041.0, "participants": 22725.0, "drone_activities": 110}, {"type": "新品品鉴会", "count": 187, "valid": 166, "valid_rate": 0.8877005347593583, "sales": 5574789.18, "avg_sales": 29811.706844919783, "drone_units": 60301.0, "wechat": 3689.0, "participants": 5144.0, "drone_activities": 113}, {"type": "其他类型", "count": 131, "valid": 85, "valid_rate": 0.648854961832061, "sales": 1057251.35, "avg_sales": 8070.620992366413, "drone_units": 442.0, "wechat": 4264.0, "participants": 21512.0, "drone_activities": 64}, {"type": "workshop课堂", "count": 101, "valid": 67, "valid_rate": 0.6633663366336634, "sales": 362208.5, "avg_sales": 3586.2227722772277, "drone_units": 95.0, "wechat": 982.0, "participants": 1309.0, "drone_activities": 54}, {"type": "外拍活动", "count": 76, "valid": 43, "valid_rate": 0.5657894736842105, "sales": 275813.0, "avg_sales": 3629.1184210526317, "drone_units": 812.0, "wechat": 1150.0, "participants": 2602.0, "drone_activities": 35}, {"type": "异业合作-商场宣发资源置换", "count": 44, "valid": 34, "valid_rate": 0.7727272727272727, "sales": 226300.8, "avg_sales": 5143.2, "drone_units": 77.0, "wechat": 887.0, "participants": 2325.0, "drone_activities": 17}, {"type": "未分类", "count": 1, "valid": 1, "valid_rate": 1.0, "sales": 8223.0, "avg_sales": 8223.0, "drone_units": 3.0, "wechat": 7.0, "participants": 60.0, "drone_activities": 0}], "type_monthly": {"workshop课堂": {"2026-04": {"count": 39, "sales": 124060.6}, "2026-05": {"count": 46, "sales": 114622.4}, "2026-06": {"count": 16, "sales": 123525.5}}, "其他类型": {"2026-04": {"count": 41, "sales": 193828.9}, "2026-05": {"count": 53, "sales": 474476.7}, "2026-06": {"count": 37, "sales": 388945.75}}, "外拍活动": {"2026-04": {"count": 33, "sales": 118876.0}, "2026-05": {"count": 18, "sales": 41152.0}, "2026-06": {"count": 25, "sales": 115785.0}}, "异业合作": {"2026-04": {"count": 107, "sales": 301649.8}, "2026-05": {"count": 75, "sales": 231809.8}, "2026-06": {"count": 53, "sales": 180856.55}}, "异业合作-商场宣发资源置换": {"2026-04": {"count": 16, "sales": 94590.15}, "2026-05": {"count": 18, "sales": 74240.0}, "2026-06": {"count": 10, "sales": 57470.65}}, "新品品鉴会": {"2026-04": {"count": 6, "sales": 80446.3}, "2026-05": {"count": 29, "sales": 212701.9}, "2026-06": {"count": 152, "sales": 5281640.98}}, "无人机专项": {"2026-04": {"count": 72, "sales": 175990.85}, "2026-05": {"count": 102, "sales": 336317.14}, "2026-06": {"count": 89, "sales": 365724.3}}, "未分类": {"2026-04": {"count": 1, "sales": 8223.0}, "2026-05": {"count": 0, "sales": 0}, "2026-06": {"count": 0, "sales": 0}}}, "product": {"Luna": 48608.0, "X系列": 302.0, "Go系列": 11408.0, "Ace系列": 7567.0}, "product_monthly": {"Luna": {"2026-04": 0.0, "2026-05": 0.0, "2026-06": 48608.0}, "X系列": {"2026-04": 71.0, "2026-05": 143.0, "2026-06": 88.0}, "Go系列": {"2026-04": 152.0, "2026-05": 2680.0, "2026-06": 8576.0}, "Ace系列": {"2026-04": 836.0, "2026-05": 225.0, "2026-06": 6506.0}}, "product_type_cross": {"workshop课堂": {"Luna": 9.0, "X系列": 18.0, "Go系列": 39.0, "Ace系列": 29.0}, "其他类型": {"Luna": 70.0, "X系列": 93.0, "Go系列": 123.0, "Ace系列": 156.0}, "外拍活动": {"Luna": 17.0, "X系列": 33.0, "Go系列": 20.0, "Ace系列": 742.0}, "异业合作": {"Luna": 19.0, "X系列": 57.0, "Go系列": 121.0, "Ace系列": 87.0}, "异业合作-商场宣发资源置换": {"Luna": 0.0, "X系列": 12.0, "Go系列": 35.0, "Ace系列": 30.0}, "新品品鉴会": {"Luna": 48452.0, "X系列": 52.0, "Go系列": 5361.0, "Ace系列": 6436.0}, "无人机专项": {"Luna": 41.0, "X系列": 37.0, "Go系列": 5707.0, "Ace系列": 86.0}, "未分类": {"Luna": 0, "X系列": 0.0, "Go系列": 2.0, "Ace系列": 1.0}}, "agent_ranking": [{"agent": "江苏科云智能科技有限公司", "province": "华东-安徽、华东-山东、华东-江苏、华东-江西、未知", "count": 124, "valid": 109, "valid_rate": 0.8790322580645161, "sales": 1594695.8, "drone_units": 407.0, "wechat": 2547.0, "participants": 7424.0, "avg_sales": 12860.45}, {"agent": "成都和易购互联网技术有限公司", "province": "未知、西北-宁夏、西北-甘肃、西北-陕西、西北-青海、西南-云南、西南-四川、西南-西藏、西南-贵州、西南-重庆", "count": 167, "valid": 93, "valid_rate": 0.5568862275449101, "sales": 1416782.8, "drone_units": 3400.0, "wechat": 2504.0, "participants": 19779.0, "avg_sales": 8483.729341317365}, {"agent": "广州永佳商业贸易有限公司", "province": "华南-广东", "count": 22, "valid": 17, "valid_rate": 0.7727272727272727, "sales": 715552.0, "drone_units": 50.0, "wechat": 476.0, "participants": 1359.0, "avg_sales": 32525.090909090908}, {"agent": "北京中澶云途科技有限公司", "province": "华北-北京、华北-天津、华北-河北", "count": 51, "valid": 47, "valid_rate": 0.9215686274509803, "sales": 711106.54, "drone_units": 146.0, "wechat": 792.0, "participants": 1498.0, "avg_sales": 13943.26549019608}, {"agent": "深圳市时呈科技有限公司", "province": "华南-广东、华南-广西、华南-海南、未知", "count": 114, "valid": 66, "valid_rate": 0.5789473684210527, "sales": 567035.75, "drone_units": 3540.0, "wechat": 1964.0, "participants": 5021.0, "avg_sales": 4973.997807017544}, {"agent": "浙江飓隆商贸有限公司", "province": "华东-浙江", "count": 53, "valid": 42, "valid_rate": 0.7924528301886793, "sales": 529615.1, "drone_units": 122.0, "wechat": 1082.0, "participants": 1297.0, "avg_sales": 9992.737735849056}, {"agent": "直营", "province": "华东-江苏、华南-广东", "count": 7, "valid": 5, "valid_rate": 0.7142857142857143, "sales": 523122.88, "drone_units": 72.0, "wechat": 1082.0, "participants": 2464.0, "avg_sales": 74731.84}, {"agent": "上海兰焜信息科技有限公司", "province": "华东-上海", "count": 68, "valid": 37, "valid_rate": 0.5441176470588235, "sales": 431960.1, "drone_units": 81.0, "wechat": 1028.0, "participants": 4152.0, "avg_sales": 6352.354411764705}, {"agent": "武汉强视电子科技有限公司", "province": "华中-河南、华中-湖北、华北-山西、未知", "count": 76, "valid": 40, "valid_rate": 0.5263157894736842, "sales": 404679.0, "drone_units": 98.0, "wechat": 1097.0, "participants": 1713.0, "avg_sales": 5324.723684210527}, {"agent": "深圳市聚影联创科技有限公司", "province": "华东-福建、华北-北京、华北-天津、华北-河北、西南-贵州", "count": 30, "valid": 20, "valid_rate": 0.6666666666666666, "sales": 377197.0, "drone_units": 127.0, "wechat": 1247.0, "participants": 13429.0, "avg_sales": 12573.233333333334}, {"agent": "河南强视电子科技有限公司", "province": "华东-山东、华中-河南、华中-湖北、华中-湖南、未知、西北-陕西", "count": 41, "valid": 25, "valid_rate": 0.6097560975609756, "sales": 317017.2, "drone_units": 72.0, "wechat": 911.0, "participants": 2141.0, "avg_sales": 7732.126829268293}, {"agent": "四川省汉玛兴达商贸有限公司", "province": "西北-甘肃、西南-四川、西南-重庆", "count": 33, "valid": 12, "valid_rate": 0.36363636363636365, "sales": 231260.0, "drone_units": 59521.0, "wechat": 362.0, "participants": 2783.0, "avg_sales": 7007.878787878788}, {"agent": "无锡智翔空域数码科技有限公司", "province": "华东-江苏", "count": 39, "valid": 17, "valid_rate": 0.4358974358974359, "sales": 219971.3, "drone_units": 33.0, "wechat": 271.0, "participants": 484.0, "avg_sales": 5640.289743589743}, {"agent": "新疆云络音达通信有限公司", "province": "未知、西北-新疆", "count": 19, "valid": 8, "valid_rate": 0.42105263157894735, "sales": 189853.0, "drone_units": 49.0, "wechat": 513.0, "participants": 2835.0, "avg_sales": 9992.263157894737}, {"agent": "未知代理商", "province": "未知", "count": 11, "valid": 7, "valid_rate": 0.6363636363636364, "sales": 167395.0, "drone_units": 6.0, "wechat": 288.0, "participants": 1254.0, "avg_sales": 15217.727272727272}, {"agent": "福州杰斯敏贸易有限公司", "province": "华东-福建、华中-湖南、未知", "count": 59, "valid": 28, "valid_rate": 0.4745762711864407, "sales": 160782.4, "drone_units": 44.0, "wechat": 534.0, "participants": 965.0, "avg_sales": 2725.1254237288135}, {"agent": "辽宁浩联云凡科技有限公司", "province": "东北-吉林、东北-辽宁、东北-黑龙江、华北-内蒙古", "count": 44, "valid": 26, "valid_rate": 0.5909090909090909, "sales": 126686.2, "drone_units": 29.0, "wechat": 378.0, "participants": 464.0, "avg_sales": 2879.231818181818}, {"agent": "深圳市爱智行数码有限公司", "province": "华中-湖北、华北-河北、华南-广东", "count": 21, "valid": 12, "valid_rate": 0.5714285714285714, "sales": 98257.6, "drone_units": 28.0, "wechat": 258.0, "participants": 274.0, "avg_sales": 4678.933333333333}, {"agent": "沈阳凯驰科技有限公司", "province": "东北-辽宁、未知", "count": 11, "valid": 8, "valid_rate": 0.7272727272727273, "sales": 97324.3, "drone_units": 33.0, "wechat": 267.0, "participants": 428.0, "avg_sales": 8847.663636363637}, {"agent": "广州永佳商业贸易有限公司,广州永佳商业贸易有限公司", "province": "华南-广东", "count": 7, "valid": 2, "valid_rate": 0.2857142857142857, "sales": 59120.0, "drone_units": 2.0, "wechat": 85.0, "participants": 103.0, "avg_sales": 8445.714285714286}], "store_ranking": [{"store": "广州番禺天河城授权体验店", "agent": "广州永佳商业贸易有限公司", "province": "华南-广东", "count": 4, "sales": 587396.0, "drone_units": 13.0, "wechat": 271.0, "participants": 1051.0}, {"store": "深圳壹方城直营旗舰店", "agent": "直营", "province": "华南-广东", "count": 5, "sales": 509123.88, "drone_units": 31.0, "wechat": 1049.0, "participants": 2422.0}, {"store": "昆明恒隆授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西南-云南", "count": 4, "sales": 267500.0, "drone_units": 63.0, "wechat": 79.0, "participants": 161.0}, {"store": "北京五棵松照材专卖店", "agent": "深圳市聚影联创科技有限公司", "province": "华北-北京", "count": 1, "sales": 249661.0, "drone_units": 83.0, "wechat": 500.0, "participants": 10000.0}, {"store": "上海月星环球港授权体验店", "agent": "上海兰焜信息科技有限公司", "province": "华东-上海", "count": 8, "sales": 219497.0, "drone_units": 17.0, "wechat": 183.0, "participants": 298.0}, {"store": "昆明顺城授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西南-云南", "count": 3, "sales": 206190.0, "drone_units": 9.0, "wechat": 81.0, "participants": 136.0}, {"store": "青岛万象城授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-山东", "count": 5, "sales": 179000.0, "drone_units": 27.0, "wechat": 285.0, "participants": 270.0}, {"store": "兰州万象城授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西北-甘肃", "count": 3, "sales": 176722.0, "drone_units": 9.0, "wechat": 23.0, "participants": 31.0}, {"store": "乌鲁木齐经开万达授权体验店", "agent": "新疆云络音达通信有限公司", "province": "西北-新疆", "count": 3, "sales": 168296.0, "drone_units": 42.0, "wechat": 327.0, "participants": 2570.0}, {"store": "成都太古里授权体验店", "agent": "未知代理商", "province": "未知", "count": 4, "sales": 160159.0, "drone_units": 3.0, "wechat": 188.0, "participants": 1130.0}, {"store": "海口天街授权体验店", "agent": "深圳市时呈科技有限公司", "province": "华南-海南", "count": 3, "sales": 156826.8, "drone_units": 25.0, "wechat": 188.0, "participants": 105.0}, {"store": "济南万象城授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-山东", "count": 3, "sales": 146388.0, "drone_units": 37.0, "wechat": 98.0, "participants": 46.0}, {"store": "成都万象城授权体验店", "agent": "四川省汉玛兴达商贸有限公司", "province": "西南-四川", "count": 14, "sales": 136906.0, "drone_units": 9.0, "wechat": 156.0, "participants": 1954.0}, {"store": "西安万象城授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西北-陕西", "count": 4, "sales": 134047.0, "drone_units": 51.0, "wechat": 40.0, "participants": 70.0}, {"store": "金华永盛授权体验店", "agent": "浙江飓隆商贸有限公司", "province": "华东-浙江", "count": 4, "sales": 120606.1, "drone_units": 30.0, "wechat": 164.0, "participants": 190.0}, {"store": "泰州万象城授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-江苏", "count": 3, "sales": 119049.0, "drone_units": 32.0, "wechat": 82.0, "participants": 46.0}, {"store": "拉萨王府井授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西南-西藏", "count": 3, "sales": 117096.0, "drone_units": 2.0, "wechat": 21.0, "participants": 24.0}, {"store": "杭州萧山万象汇授权体验店", "agent": "浙江飓隆商贸有限公司", "province": "华东-浙江", "count": 5, "sales": 94784.0, "drone_units": 18.0, "wechat": 124.0, "participants": 121.0}, {"store": "山东菏泽佳和城授权体验店", "agent": "江苏科云智能科技有限公司", "province": "未知", "count": 3, "sales": 91999.0, "drone_units": 37.0, "wechat": 85.0, "participants": 120.0}, {"store": "青岛崂山万象汇授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-山东", "count": 4, "sales": 91000.0, "drone_units": 18.0, "wechat": 104.0, "participants": 84.0}], "prov_dist": [{"province": "华南-广东", "count": 135, "sales": 1666082.43}, {"province": "华东-山东", "count": 56, "sales": 918597.4}, {"province": "华北-北京", "count": 35, "sales": 864863.9}, {"province": "华东-江苏", "count": 90, "sales": 688199.8}, {"province": "华东-浙江", "count": 53, "sales": 529615.1}, {"province": "华东-上海", "count": 94, "sales": 500911.4}, {"province": "未知", "count": 76, "sales": 499309.0}, {"province": "西南-云南", "count": 18, "sales": 490581.0}, {"province": "西南-四川", "count": 78, "sales": 422895.4}, {"province": "华中-河南", "count": 46, "sales": 289179.0}, {"province": "西北-陕西", "count": 34, "sales": 205796.2}, {"province": "西北-新疆", "count": 13, "sales": 185559.0}, {"province": "东北-辽宁", "count": 34, "sales": 181581.5}, {"province": "华南-海南", "count": 10, "sales": 179883.2}, {"province": "西北-甘肃", "count": 8, "sales": 176722.0}, {"province": "华东-福建", "count": 43, "sales": 151968.2}, {"province": "华北-天津", "count": 17, "sales": 134563.2}, {"province": "西南-西藏", "count": 3, "sales": 117096.0}, {"province": "华东-安徽", "count": 10, "sales": 109712.0}, {"province": "华东-江西", "count": 9, "sales": 109323.0}, {"province": "华中-湖南", "count": 29, "sales": 106310.3}, {"province": "西南-重庆", "count": 39, "sales": 103635.2}, {"province": "华北-河北", "count": 22, "sales": 101346.04}, {"province": "华中-湖北", "count": 28, "sales": 85779.0}, {"province": "华南-广西", "count": 8, "sales": 64623.0}, {"province": "西南-贵州", "count": 8, "sales": 63611.0}, {"province": "华北-山西", "count": 13, "sales": 59460.0}, {"province": "西北-宁夏", "count": 6, "sales": 40000.0}, {"province": "东北-黑龙江", "count": 9, "sales": 27688.0}, {"province": "东北-吉林", "count": 6, "sales": 14741.0}, {"province": "西北-青海", "count": 5, "sales": 7302.0}, {"province": "华北-内蒙古", "count": 3, "sales": 0.0}], "channel_comparison": {"mall": {"count": 907, "sales": 7439970.59, "valid": 575, "drone_units": 8045.0, "wechat": 14066.0, "participants": 49766.0, "avg_sales": 8202.834167585446}, "zhao": {"count": 113, "sales": 966445.8, "valid": 65, "drone_units": 59762.0, "wechat": 2773.0, "participants": 17473.0, "avg_sales": 8552.617699115044}}, "drone_comparison": {"drone": {"count": 633, "sales": 6048836.82, "valid": 373, "drone_units": 67182.0, "wechat": 10980.0, "participants": 44155.0, "avg_sales": 9555.824360189574}, "non_drone": {"count": 405, "sales": 3048097.45, "valid": 279, "drone_units": 703.0, "wechat": 7229.0, "participants": 26802.0, "avg_sales": 7526.166543209877}}, "cross_comparison": {"cross": {"count": 279, "sales": 940616.95, "valid": 170, "drone_units": 361.0, "wechat": 4928.0, "participants": 25050.0, "avg_sales": 3371.3869175627237}, "normal": {"count": 759, "sales": 8156317.32, "valid": 482, "drone_units": 67524.0, "wechat": 13281.0, "participants": 45907.0, "avg_sales": 10746.136126482214}}, "brand_ranking": [{"brand": "迪卡侬", "count": 8}, {"brand": "华为", "count": 3}, {"brand": "乐高", "count": 2}, {"brand": "崔克", "count": 2}, {"brand": "HOKA", "count": 2}, {"brand": "广发银行", "count": 2}, {"brand": "交通银行", "count": 2}, {"brand": "北面", "count": 2}, {"brand": "索尼", "count": 2}, {"brand": "brompton&gaga", "count": 2}, {"brand": "霸弗", "count": 1}, {"brand": "华为汽车", "count": 1}, {"brand": "昂跑", "count": 1}, {"brand": "小松山推", "count": 1}, {"brand": "九玖佰萃温养堂", "count": 1}, {"brand": "淄博陶涛羽毛球俱乐部", "count": 1}, {"brand": "堡狮龙，Kappa，SPELIALIZED", "count": 1}, {"brand": "菏泽佳和城商场", "count": 1}, {"brand": "成都骑行吧", "count": 1}, {"brand": "TREK公路自行车", "count": 1}]}, "mall": {"overview": {"total": 907, "valid": 575, "total_sales": 7439970.59, "total_drone_units": 8045.0, "total_participants": 49766.0, "total_wechat": 14066.0, "avg_sales": 8202.834167585446, "conversion_rate": 0.6339581036383682}, "monthly": {"2026-04": {"count": 269, "valid": 161, "sales": 938327.3, "drone_units": 997.0, "participants": 7833.0, "wechat": 3853.0, "conversion_rate": 0.5985130111524164, "drone_activities": 132, "avg_sales": 3488.2055762081786}, "2026-05": {"count": 308, "valid": 183, "sales": 1129497.74, "drone_units": 2931.0, "participants": 27744.0, "wechat": 4408.0, "conversion_rate": 0.5941558441558441, "drone_activities": 199, "avg_sales": 3667.2004545454547}, "2026-06": {"count": 330, "valid": 231, "sales": 5372145.55, "drone_units": 4117.0, "participants": 14189.0, "wechat": 5805.0, "conversion_rate": 0.7, "drone_activities": 232, "avg_sales": 16279.228939393939}}, "type_metrics": [{"type": "无人机专项", "count": 258, "valid": 118, "valid_rate": 0.4573643410852713, "sales": 864350.99, "avg_sales": 3350.197635658915, "drone_units": 5869.0, "wechat": 3166.0, "participants": 15204.0, "drone_activities": 235}, {"type": "异业合作", "count": 201, "valid": 119, "valid_rate": 0.5920398009950248, "sales": 635899.15, "avg_sales": 3163.6773631840797, "drone_units": 256.0, "wechat": 3317.0, "participants": 18734.0, "drone_activities": 93}, {"type": "新品品鉴会", "count": 158, "valid": 144, "valid_rate": 0.9113924050632911, "sales": 4463624.0, "avg_sales": 28250.78481012658, "drone_units": 659.0, "wechat": 2936.0, "participants": 3886.0, "drone_activities": 96}, {"type": "其他类型", "count": 110, "valid": 73, "valid_rate": 0.6636363636363637, "sales": 748931.25, "avg_sales": 6808.465909090909, "drone_units": 315.0, "wechat": 2303.0, "participants": 7244.0, "drone_activities": 54}, {"type": "workshop课堂", "count": 90, "valid": 63, "valid_rate": 0.7, "sales": 332249.4, "avg_sales": 3691.6600000000003, "drone_units": 92.0, "wechat": 843.0, "participants": 1066.0, "drone_activities": 46}, {"type": "外拍活动", "count": 53, "valid": 30, "valid_rate": 0.5660377358490566, "sales": 208716.0, "avg_sales": 3938.0377358490564, "drone_units": 789.0, "wechat": 750.0, "participants": 1696.0, "drone_activities": 25}, {"type": "异业合作-商场宣发资源置换", "count": 37, "valid": 28, "valid_rate": 0.7567567567567568, "sales": 186199.8, "avg_sales": 5032.427027027026, "drone_units": 65.0, "wechat": 751.0, "participants": 1936.0, "drone_activities": 14}], "type_monthly": {"workshop课堂": {"2026-04": {"count": 36, "sales": 121062.6}, "2026-05": {"count": 41, "sales": 109258.3}, "2026-06": {"count": 13, "sales": 101928.5}}, "其他类型": {"2026-04": {"count": 32, "sales": 187854.9}, "2026-05": {"count": 47, "sales": 210518.6}, "2026-06": {"count": 31, "sales": 350557.75}}, "外拍活动": {"2026-04": {"count": 25, "sales": 101680.0}, "2026-05": {"count": 8, "sales": 5055.0}, "2026-06": {"count": 20, "sales": 101981.0}}, "异业合作": {"2026-04": {"count": 88, "sales": 260294.8}, "2026-05": {"count": 67, "sales": 199254.8}, "2026-06": {"count": 46, "sales": 176349.55}}, "异业合作-商场宣发资源置换": {"2026-04": {"count": 14, "sales": 74696.15}, "2026-05": {"count": 16, "sales": 59142.0}, "2026-06": {"count": 7, "sales": 52361.65}}, "新品品鉴会": {"2026-04": {"count": 3, "sales": 16748.0}, "2026-05": {"count": 27, "sales": 209951.9}, "2026-06": {"count": 128, "sales": 4236924.1}}, "无人机专项": {"2026-04": {"count": 71, "sales": 175990.85}, "2026-05": {"count": 102, "sales": 336317.14}, "2026-06": {"count": 85, "sales": 352043.0}}}, "product": {"Luna": 544.0, "X系列": 225.0, "Go系列": 6132.0, "Ace系列": 1144.0}, "product_monthly": {"Luna": {"2026-04": 0.0, "2026-05": 0.0, "2026-06": 544.0}, "X系列": {"2026-04": 59.0, "2026-05": 91.0, "2026-06": 75.0}, "Go系列": {"2026-04": 130.0, "2026-05": 2652.0, "2026-06": 3350.0}, "Ace系列": {"2026-04": 808.0, "2026-05": 188.0, "2026-06": 148.0}}, "product_type_cross": {"workshop课堂": {"Luna": 9.0, "X系列": 17.0, "Go系列": 38.0, "Ace系列": 28.0}, "其他类型": {"Luna": 58.0, "X系列": 49.0, "Go系列": 93.0, "Ace系列": 115.0}, "外拍活动": {"Luna": 16.0, "X系列": 26.0, "Go系列": 17.0, "Ace系列": 730.0}, "异业合作": {"Luna": 19.0, "X系列": 50.0, "Go系列": 107.0, "Ace系列": 80.0}, "异业合作-商场宣发资源置换": {"Luna": 0.0, "X系列": 6.0, "Go系列": 30.0, "Ace系列": 29.0}, "新品品鉴会": {"Luna": 401.0, "X系列": 40.0, "Go系列": 141.0, "Ace系列": 77.0}, "无人机专项": {"Luna": 41.0, "X系列": 37.0, "Go系列": 5706.0, "Ace系列": 85.0}}, "agent_ranking": [{"agent": "江苏科云智能科技有限公司", "province": "华东-安徽、华东-山东、华东-江苏、华东-江西、未知", "count": 124, "valid": 109, "valid_rate": 0.8790322580645161, "sales": 1594695.8, "drone_units": 407.0, "wechat": 2547.0, "participants": 7424.0, "avg_sales": 12860.45}, {"agent": "成都和易购互联网技术有限公司", "province": "未知、西北-宁夏、西北-甘肃、西北-陕西、西北-青海、西南-云南、西南-四川、西南-西藏、西南-贵州、西南-重庆", "count": 167, "valid": 93, "valid_rate": 0.5568862275449101, "sales": 1416782.8, "drone_units": 3400.0, "wechat": 2504.0, "participants": 19779.0, "avg_sales": 8483.729341317365}, {"agent": "广州永佳商业贸易有限公司", "province": "华南-广东", "count": 22, "valid": 17, "valid_rate": 0.7727272727272727, "sales": 715552.0, "drone_units": 50.0, "wechat": 476.0, "participants": 1359.0, "avg_sales": 32525.090909090908}, {"agent": "北京中澶云途科技有限公司", "province": "华北-北京、华北-天津、华北-河北", "count": 51, "valid": 47, "valid_rate": 0.9215686274509803, "sales": 711106.54, "drone_units": 146.0, "wechat": 792.0, "participants": 1498.0, "avg_sales": 13943.26549019608}, {"agent": "深圳市时呈科技有限公司", "province": "华南-广东、华南-广西、华南-海南、未知", "count": 114, "valid": 66, "valid_rate": 0.5789473684210527, "sales": 567035.75, "drone_units": 3540.0, "wechat": 1964.0, "participants": 5021.0, "avg_sales": 4973.997807017544}, {"agent": "浙江飓隆商贸有限公司", "province": "华东-浙江", "count": 53, "valid": 42, "valid_rate": 0.7924528301886793, "sales": 529615.1, "drone_units": 122.0, "wechat": 1082.0, "participants": 1297.0, "avg_sales": 9992.737735849056}, {"agent": "上海兰焜信息科技有限公司", "province": "华东-上海", "count": 68, "valid": 37, "valid_rate": 0.5441176470588235, "sales": 431960.1, "drone_units": 81.0, "wechat": 1028.0, "participants": 4152.0, "avg_sales": 6352.354411764705}, {"agent": "武汉强视电子科技有限公司", "province": "华中-河南、华中-湖北、华北-山西、未知", "count": 76, "valid": 40, "valid_rate": 0.5263157894736842, "sales": 404679.0, "drone_units": 98.0, "wechat": 1097.0, "participants": 1713.0, "avg_sales": 5324.723684210527}, {"agent": "新疆云络音达通信有限公司", "province": "未知、西北-新疆", "count": 19, "valid": 8, "valid_rate": 0.42105263157894735, "sales": 189853.0, "drone_units": 49.0, "wechat": 513.0, "participants": 2835.0, "avg_sales": 9992.263157894737}, {"agent": "无锡智翔空域数码科技有限公司", "province": "华东-江苏", "count": 34, "valid": 14, "valid_rate": 0.4117647058823529, "sales": 181028.0, "drone_units": 23.0, "wechat": 230.0, "participants": 426.0, "avg_sales": 5324.35294117647}, {"agent": "福州杰斯敏贸易有限公司", "province": "华东-福建、华中-湖南、未知", "count": 59, "valid": 28, "valid_rate": 0.4745762711864407, "sales": 160782.4, "drone_units": 44.0, "wechat": 534.0, "participants": 965.0, "avg_sales": 2725.1254237288135}, {"agent": "四川省汉玛兴达商贸有限公司", "province": "西南-四川", "count": 14, "valid": 7, "valid_rate": 0.5, "sales": 136906.0, "drone_units": 9.0, "wechat": 156.0, "participants": 1954.0, "avg_sales": 9779.0}, {"agent": "辽宁浩联云凡科技有限公司", "province": "东北-吉林、东北-辽宁、东北-黑龙江、华北-内蒙古", "count": 44, "valid": 26, "valid_rate": 0.5909090909090909, "sales": 126686.2, "drone_units": 29.0, "wechat": 378.0, "participants": 464.0, "avg_sales": 2879.231818181818}, {"agent": "深圳市爱智行数码有限公司", "province": "华中-湖北、华北-河北、华南-广东", "count": 21, "valid": 12, "valid_rate": 0.5714285714285714, "sales": 98257.6, "drone_units": 28.0, "wechat": 258.0, "participants": 274.0, "avg_sales": 4678.933333333333}, {"agent": "广州永佳商业贸易有限公司,广州永佳商业贸易有限公司", "province": "华南-广东", "count": 7, "valid": 2, "valid_rate": 0.2857142857142857, "sales": 59120.0, "drone_units": 2.0, "wechat": 85.0, "participants": 103.0, "avg_sales": 8445.714285714286}, {"agent": "天津市汇康泰商贸有限公司", "province": "华北-天津", "count": 5, "valid": 5, "valid_rate": 1.0, "sales": 46190.0, "drone_units": 6.0, "wechat": 99.0, "participants": 105.0, "avg_sales": 9238.0}, {"agent": "山西美链科技有限公司", "province": "华北-山西、未知", "count": 7, "valid": 6, "valid_rate": 0.8571428571428571, "sales": 37769.0, "drone_units": 8.0, "wechat": 76.0, "participants": 67.0, "avg_sales": 5395.571428571428}, {"agent": "上海海然锋实业有限公司", "province": "华东-上海", "count": 21, "valid": 16, "valid_rate": 0.7619047619047619, "sales": 31951.3, "drone_units": 3.0, "wechat": 247.0, "participants": 330.0, "avg_sales": 1521.490476190476}, {"agent": "辽宁浩联云凡科技有限公司,江苏科云智能科技有限公司,北京中澶云途科技有限公司,山西美链科技有限公司,深圳市时呈科技有限公司,武汉强视电子科技有限公司,广州永佳商业贸易有限公司", "province": "未知", "count": 1, "valid": 0, "valid_rate": 0.0, "sales": 0, "drone_units": 0.0, "wechat": 0, "participants": 0, "avg_sales": 0.0}], "store_ranking": [{"store": "广州番禺天河城授权体验店", "agent": "广州永佳商业贸易有限公司", "province": "华南-广东", "count": 4, "sales": 587396.0, "drone_units": 13.0, "wechat": 271.0, "participants": 1051.0}, {"store": "昆明恒隆授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西南-云南", "count": 4, "sales": 267500.0, "drone_units": 63.0, "wechat": 79.0, "participants": 161.0}, {"store": "上海月星环球港授权体验店", "agent": "上海兰焜信息科技有限公司", "province": "华东-上海", "count": 8, "sales": 219497.0, "drone_units": 17.0, "wechat": 183.0, "participants": 298.0}, {"store": "昆明顺城授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西南-云南", "count": 3, "sales": 206190.0, "drone_units": 9.0, "wechat": 81.0, "participants": 136.0}, {"store": "青岛万象城授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-山东", "count": 5, "sales": 179000.0, "drone_units": 27.0, "wechat": 285.0, "participants": 270.0}, {"store": "兰州万象城授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西北-甘肃", "count": 3, "sales": 176722.0, "drone_units": 9.0, "wechat": 23.0, "participants": 31.0}, {"store": "乌鲁木齐经开万达授权体验店", "agent": "新疆云络音达通信有限公司", "province": "西北-新疆", "count": 3, "sales": 168296.0, "drone_units": 42.0, "wechat": 327.0, "participants": 2570.0}, {"store": "海口天街授权体验店", "agent": "深圳市时呈科技有限公司", "province": "华南-海南", "count": 3, "sales": 156826.8, "drone_units": 25.0, "wechat": 188.0, "participants": 105.0}, {"store": "济南万象城授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-山东", "count": 3, "sales": 146388.0, "drone_units": 37.0, "wechat": 98.0, "participants": 46.0}, {"store": "成都万象城授权体验店", "agent": "四川省汉玛兴达商贸有限公司", "province": "西南-四川", "count": 14, "sales": 136906.0, "drone_units": 9.0, "wechat": 156.0, "participants": 1954.0}, {"store": "西安万象城授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西北-陕西", "count": 4, "sales": 134047.0, "drone_units": 51.0, "wechat": 40.0, "participants": 70.0}, {"store": "金华永盛授权体验店", "agent": "浙江飓隆商贸有限公司", "province": "华东-浙江", "count": 4, "sales": 120606.1, "drone_units": 30.0, "wechat": 164.0, "participants": 190.0}, {"store": "泰州万象城授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-江苏", "count": 3, "sales": 119049.0, "drone_units": 32.0, "wechat": 82.0, "participants": 46.0}, {"store": "拉萨王府井授权体验店", "agent": "成都和易购互联网技术有限公司", "province": "西南-西藏", "count": 3, "sales": 117096.0, "drone_units": 2.0, "wechat": 21.0, "participants": 24.0}, {"store": "杭州萧山万象汇授权体验店", "agent": "浙江飓隆商贸有限公司", "province": "华东-浙江", "count": 5, "sales": 94784.0, "drone_units": 18.0, "wechat": 124.0, "participants": 121.0}, {"store": "山东菏泽佳和城授权体验店", "agent": "江苏科云智能科技有限公司", "province": "未知", "count": 3, "sales": 91999.0, "drone_units": 37.0, "wechat": 85.0, "participants": 120.0}, {"store": "青岛崂山万象汇授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-山东", "count": 4, "sales": 91000.0, "drone_units": 18.0, "wechat": 104.0, "participants": 84.0}, {"store": "徐州苏宁授权体验店", "agent": "江苏科云智能科技有限公司", "province": "华东-江苏", "count": 4, "sales": 90707.5, "drone_units": 9.0, "wechat": 83.0, "participants": 110.0}, {"store": "常州万象城授权体验店", "agent": "无锡智翔空域数码科技有限公司", "province": "华东-江苏", "count": 5, "sales": 90000.0, "drone_units": 2.0, "wechat": 36.0, "participants": 56.0}, {"store": "北京西单大悦城授权体验店", "agent": "北京中澶云途科技有限公司", "province": "华北-北京", "count": 2, "sales": 86584.1, "drone_units": 6.0, "wechat": 29.0, "participants": 21.0}], "prov_dist": [{"province": "华南-广东", "count": 130, "sales": 1156958.55}, {"province": "华东-山东", "count": 40, "sales": 746048.3}, {"province": "华东-江苏", "count": 83, "sales": 635257.5}, {"province": "华北-北京", "count": 34, "sales": 615202.9}, {"province": "华东-浙江", "count": 53, "sales": 529615.1}, {"province": "西南-云南", "count": 18, "sales": 490581.0}, {"province": "华东-上海", "count": 89, "sales": 463911.4}, {"province": "西南-四川", "count": 66, "sales": 334428.4}, {"province": "华中-河南", "count": 44, "sales": 286581.0}, {"province": "未知", "count": 52, "sales": 250916.0}, {"province": "西北-陕西", "count": 31, "sales": 197813.2}, {"province": "西北-新疆", "count": 13, "sales": 185559.0}, {"province": "华南-海南", "count": 10, "sales": 179883.2}, {"province": "西北-甘肃", "count": 3, "sales": 176722.0}, {"province": "西南-西藏", "count": 3, "sales": 117096.0}, {"province": "华东-安徽", "count": 10, "sales": 109712.0}, {"province": "华东-江西", "count": 9, "sales": 109323.0}, {"province": "华东-福建", "count": 31, "sales": 98563.2}, {"province": "华北-天津", "count": 13, "sales": 94563.2}, {"province": "西南-重庆", "count": 36, "sales": 93138.2}, {"province": "东北-辽宁", "count": 26, "sales": 84257.2}, {"province": "华中-湖北", "count": 26, "sales": 82981.0}, {"province": "华北-河北", "count": 12, "sales": 70013.04}, {"province": "华南-广西", "count": 8, "sales": 64623.0}, {"province": "西南-贵州", "count": 5, "sales": 60813.0}, {"province": "华北-山西", "count": 13, "sales": 59460.0}, {"province": "华中-湖南", "count": 20, "sales": 56219.2}, {"province": "西北-宁夏", "count": 6, "sales": 40000.0}, {"province": "东北-黑龙江", "count": 9, "sales": 27688.0}, {"province": "东北-吉林", "count": 6, "sales": 14741.0}, {"province": "西北-青海", "count": 5, "sales": 7302.0}, {"province": "华北-内蒙古", "count": 3, "sales": 0.0}], "channel_comparison": {"mall": {"count": 907, "sales": 7439970.59, "valid": 575, "drone_units": 8045.0, "wechat": 14066.0, "participants": 49766.0, "avg_sales": 8202.834167585446}, "zhao": {"count": 0, "sales": 0, "valid": 0, "drone_units": 0, "wechat": 0, "participants": 0, "avg_sales": 0}}, "drone_comparison": {"drone": {"count": 563, "sales": 4966155.14, "valid": 332, "drone_units": 7534.0, "wechat": 9268.0, "participants": 38886.0, "avg_sales": 8820.87946714032}, "non_drone": {"count": 344, "sales": 2473815.45, "valid": 243, "drone_units": 511.0, "wechat": 4798.0, "participants": 10880.0, "avg_sales": 7191.32398255814}}, "cross_comparison": {"cross": {"count": 238, "sales": 822098.95, "valid": 147, "drone_units": 321.0, "wechat": 4068.0, "participants": 20670.0, "avg_sales": 3454.197268907563}, "normal": {"count": 669, "sales": 6617871.64, "valid": 428, "drone_units": 7724.0, "wechat": 9998.0, "participants": 29096.0, "avg_sales": 9892.184813153961}}, "brand_ranking": [{"brand": "迪卡侬", "count": 8}, {"brand": "乐高", "count": 2}, {"brand": "HOKA", "count": 2}, {"brand": "广发银行", "count": 2}, {"brand": "交通银行", "count": 2}, {"brand": "华为", "count": 2}, {"brand": "brompton&gaga", "count": 2}, {"brand": "昂跑", "count": 1}, {"brand": "小松山推", "count": 1}, {"brand": "九玖佰萃温养堂", "count": 1}, {"brand": "堡狮龙，Kappa，SPELIALIZED", "count": 1}, {"brand": "菏泽佳和城商场", "count": 1}, {"brand": "成都骑行吧", "count": 1}, {"brand": "TREK公路自行车", "count": 1}, {"brand": "任天堂", "count": 1}, {"brand": "帕帕拉兹&天街商圈", "count": 1}, {"brand": "银行", "count": 1}, {"brand": "华为AITO", "count": 1}, {"brand": "中免集团", "count": 1}, {"brand": "当地羽毛球馆", "count": 1}]}, "zhao": {"overview": {"total": 113, "valid": 65, "total_sales": 966445.8, "total_drone_units": 59762.0, "total_participants": 17473.0, "total_wechat": 2773.0, "avg_sales": 8552.617699115044, "conversion_rate": 0.5752212389380531}, "monthly": {"2026-04": {"count": 41, "valid": 22, "sales": 151709.3, "drone_units": 59.0, "participants": 2344.0, "wechat": 812.0, "conversion_rate": 0.5365853658536586, "drone_activities": 22, "avg_sales": 3700.2268292682925}, "2026-05": {"count": 30, "valid": 17, "sales": 347529.2, "drone_units": 114.0, "participants": 13176.0, "wechat": 1205.0, "conversion_rate": 0.5666666666666667, "drone_activities": 13, "avg_sales": 11584.306666666667}, "2026-06": {"count": 42, "valid": 26, "sales": 467207.3, "drone_units": 59589.0, "participants": 1953.0, "wechat": 756.0, "conversion_rate": 0.6190476190476191, "drone_activities": 25, "avg_sales": 11123.983333333334}}, "type_metrics": [{"type": "异业合作", "count": 27, "valid": 12, "valid_rate": 0.4444444444444444, "sales": 63113.0, "avg_sales": 2337.5185185185187, "drone_units": 22.0, "wechat": 511.0, "participants": 2796.0, "drone_activities": 12}, {"type": "新品品鉴会", "count": 25, "valid": 18, "valid_rate": 0.72, "sales": 443677.3, "avg_sales": 17747.092, "drone_units": 59594.0, "wechat": 576.0, "participants": 1089.0, "drone_activities": 15}, {"type": "外拍活动", "count": 22, "valid": 13, "valid_rate": 0.5909090909090909, "sales": 67097.0, "avg_sales": 3049.8636363636365, "drone_units": 23.0, "wechat": 395.0, "participants": 891.0, "drone_activities": 10}, {"type": "其他类型", "count": 16, "valid": 9, "valid_rate": 0.5625, "sales": 300594.1, "avg_sales": 18787.13125, "drone_units": 103.0, "wechat": 991.0, "participants": 11930.0, "drone_activities": 8}, {"type": "workshop课堂", "count": 11, "valid": 4, "valid_rate": 0.36363636363636365, "sales": 29959.1, "avg_sales": 2723.5545454545454, "drone_units": 3.0, "wechat": 139.0, "participants": 243.0, "drone_activities": 8}, {"type": "异业合作-商场宣发资源置换", "count": 7, "valid": 6, "valid_rate": 0.8571428571428571, "sales": 40101.0, "avg_sales": 5728.714285714285, "drone_units": 12.0, "wechat": 136.0, "participants": 389.0, "drone_activities": 3}, {"type": "无人机专项", "count": 4, "valid": 2, "valid_rate": 0.5, "sales": 13681.3, "avg_sales": 3420.325, "drone_units": 2.0, "wechat": 18.0, "participants": 75.0, "drone_activities": 4}, {"type": "未分类", "count": 1, "valid": 1, "valid_rate": 1.0, "sales": 8223.0, "avg_sales": 8223.0, "drone_units": 3.0, "wechat": 7.0, "participants": 60.0, "drone_activities": 0}], "type_monthly": {"workshop课堂": {"2026-04": {"count": 3, "sales": 2998.0}, "2026-05": {"count": 5, "sales": 5364.1}, "2026-06": {"count": 3, "sales": 21597.0}}, "其他类型": {"2026-04": {"count": 8, "sales": 5845.0}, "2026-05": {"count": 5, "sales": 261360.1}, "2026-06": {"count": 3, "sales": 33389.0}}, "外拍活动": {"2026-04": {"count": 7, "sales": 17196.0}, "2026-05": {"count": 10, "sales": 36097.0}, "2026-06": {"count": 5, "sales": 13804.0}}, "异业合作": {"2026-04": {"count": 16, "sales": 33855.0}, "2026-05": {"count": 6, "sales": 26860.0}, "2026-06": {"count": 5, "sales": 2398.0}}, "异业合作-商场宣发资源置换": {"2026-04": {"count": 2, "sales": 19894.0}, "2026-05": {"count": 2, "sales": 15098.0}, "2026-06": {"count": 3, "sales": 5109.0}}, "新品品鉴会": {"2026-04": {"count": 3, "sales": 63698.3}, "2026-05": {"count": 2, "sales": 2750.0}, "2026-06": {"count": 20, "sales": 377229.0}}, "无人机专项": {"2026-04": {"count": 1, "sales": 0.0}, "2026-05": {"count": 0, "sales": 0}, "2026-06": {"count": 3, "sales": 13681.3}}, "未分类": {"2026-04": {"count": 1, "sales": 8223.0}, "2026-05": {"count": 0, "sales": 0}, "2026-06": {"count": 0, "sales": 0}}}, "product": {"Luna": 48033.0, "X系列": 68.0, "Go系列": 5256.0, "Ace系列": 6405.0}, "product_monthly": {"Luna": {"2026-04": 0, "2026-05": 0, "2026-06": 48033.0}, "X系列": {"2026-04": 12.0, "2026-05": 52.0, "2026-06": 4.0}, "Go系列": {"2026-04": 19.0, "2026-05": 27.0, "2026-06": 5210.0}, "Ace系列": {"2026-04": 28.0, "2026-05": 35.0, "2026-06": 6342.0}}, "product_type_cross": {"workshop课堂": {"Luna": 0.0, "X系列": 1.0, "Go系列": 1.0, "Ace系列": 1.0}, "其他类型": {"Luna": 0, "X系列": 41.0, "Go系列": 27.0, "Ace系列": 35.0}, "外拍活动": {"Luna": 1.0, "X系列": 7.0, "Go系列": 3.0, "Ace系列": 12.0}, "异业合作": {"Luna": 0, "X系列": 7.0, "Go系列": 9.0, "Ace系列": 6.0}, "异业合作-商场宣发资源置换": {"Luna": 0.0, "X系列": 6.0, "Go系列": 5.0, "Ace系列": 1.0}, "新品品鉴会": {"Luna": 48032.0, "X系列": 6.0, "Go系列": 5208.0, "Ace系列": 6348.0}, "无人机专项": {"Luna": 0.0, "X系列": 0.0, "Go系列": 1.0, "Ace系列": 1.0}, "未分类": {"Luna": 0, "X系列": 0.0, "Go系列": 2.0, "Ace系列": 1.0}}, "agent_ranking": [{"agent": "深圳市聚影联创科技有限公司", "province": "华东-福建、华北-北京、华北-天津、华北-河北、西南-贵州", "count": 30, "valid": 20, "valid_rate": 0.6666666666666666, "sales": 377197.0, "drone_units": 127.0, "wechat": 1247.0, "participants": 13429.0, "avg_sales": 12573.233333333334}, {"agent": "河南强视电子科技有限公司", "province": "华东-山东、华中-河南、华中-湖北、华中-湖南、未知、西北-陕西", "count": 41, "valid": 25, "valid_rate": 0.6097560975609756, "sales": 317017.2, "drone_units": 72.0, "wechat": 911.0, "participants": 2141.0, "avg_sales": 7732.126829268293}, {"agent": "沈阳凯驰科技有限公司", "province": "东北-辽宁、未知", "count": 11, "valid": 8, "valid_rate": 0.7272727272727273, "sales": 97324.3, "drone_units": 33.0, "wechat": 267.0, "participants": 428.0, "avg_sales": 8847.663636363637}, {"agent": "四川省汉玛兴达商贸有限公司", "province": "西北-甘肃、西南-四川、西南-重庆", "count": 19, "valid": 5, "valid_rate": 0.2631578947368421, "sales": 94354.0, "drone_units": 59512.0, "wechat": 206.0, "participants": 829.0, "avg_sales": 4966.0}, {"agent": "无锡智翔空域数码科技有限公司", "province": "华东-江苏", "count": 5, "valid": 3, "valid_rate": 0.6, "sales": 38943.3, "drone_units": 10.0, "wechat": 41.0, "participants": 58.0, "avg_sales": 7788.660000000001}, {"agent": "上海爪余实业有限公司", "province": "华东-上海", "count": 2, "valid": 1, "valid_rate": 0.5, "sales": 22000.0, "drone_units": 5.0, "wechat": 12.0, "participants": 27.0, "avg_sales": 11000.0}, {"agent": "上海贝来得数码影像有限公司", "province": "华东-上海", "count": 3, "valid": 2, "valid_rate": 0.6666666666666666, "sales": 15000.0, "drone_units": 2.0, "wechat": 42.0, "participants": 155.0, "avg_sales": 5000.0}, {"agent": "影联未来科技（四川）有限公司", "province": "西南-四川", "count": 1, "valid": 1, "valid_rate": 1.0, "sales": 4610.0, "drone_units": 1.0, "wechat": 44.0, "participants": 400.0, "avg_sales": 4610.0}, {"agent": "新疆云络音达通信有限公司第一分公司", "province": "未知", "count": 1, "valid": 0, "valid_rate": 0.0, "sales": 0.0, "drone_units": 0.0, "wechat": 3.0, "participants": 6.0, "avg_sales": 0.0}], "store_ranking": [{"store": "北京五棵松照材专卖店", "agent": "深圳市聚影联创科技有限公司", "province": "华北-北京", "count": 1, "sales": 249661.0, "drone_units": 83.0, "wechat": 500.0, "participants": 10000.0}, {"store": "成都华凌摄影城照材专卖店", "agent": "四川省汉玛兴达商贸有限公司", "province": "西南-四川", "count": 3, "sales": 81107.0, "drone_units": 59510.0, "wechat": 117.0, "participants": 141.0}, {"store": "沈阳百脑汇照材专卖店二店", "agent": "沈阳凯驰科技有限公司", "province": "东北-辽宁", "count": 4, "sales": 66996.0, "drone_units": 21.0, "wechat": 65.0, "participants": 195.0}, {"store": "临沂百脑汇照材专卖店", "agent": "河南强视电子科技有限公司", "province": "华东-山东", "count": 2, "sales": 62000.0, "drone_units": 25.0, "wechat": 100.0, "participants": 120.0}, {"store": "潍坊益家园照材专卖店", "agent": "河南强视电子科技有限公司", "province": "华东-山东", "count": 5, "sales": 51066.1, "drone_units": 4.0, "wechat": 164.0, "participants": 416.0}, {"store": "湖南摄影城照材专卖店", "agent": "河南强视电子科技有限公司", "province": "华中-湖南", "count": 5, "sales": 47776.0, "drone_units": 2.0, "wechat": 74.0, "participants": 338.0}, {"store": "聊城万达照材专卖店", "agent": "河南强视电子科技有限公司", "province": "未知", "count": 3, "sales": 43174.0, "drone_units": 11.0, "wechat": 78.0, "participants": 125.0}, {"store": "天津百脑汇照材专卖店", "agent": "深圳市聚影联创科技有限公司", "province": "华北-天津", "count": 4, "sales": 40000.0, "drone_units": 14.0, "wechat": 67.0, "participants": 381.0}, {"store": "厦门百脑汇照材专卖店", "agent": "深圳市聚影联创科技有限公司", "province": "华东-福建", "count": 10, "sales": 39584.0, "drone_units": 12.0, "wechat": 267.0, "participants": 1412.0}, {"store": "苏州泰华数码天地照材专卖店", "agent": "无锡智翔空域数码科技有限公司", "province": "华东-江苏", "count": 4, "sales": 33943.3, "drone_units": 8.0, "wechat": 21.0, "participants": 38.0}, {"store": "恩施星光里购物中心照材专卖店", "agent": "河南强视电子科技有限公司", "province": "未知", "count": 3, "sales": 30398.0, "drone_units": 8.0, "wechat": 108.0, "participants": 258.0}, {"store": "淄博百脑汇照材专卖店", "agent": "河南强视电子科技有限公司", "province": "华东-山东", "count": 2, "sales": 22989.0, "drone_units": 7.0, "wechat": 45.0, "participants": 44.0}, {"store": "上海环龙商场照材专卖店", "agent": "上海爪余实业有限公司", "province": "华东-上海", "count": 2, "sales": 22000.0, "drone_units": 5.0, "wechat": 12.0, "participants": 27.0}, {"store": "沈阳东软科技城照材专卖店", "agent": "沈阳凯驰科技有限公司", "province": "东北-辽宁", "count": 3, "sales": 20434.3, "drone_units": 9.0, "wechat": 70.0, "participants": 90.0}, {"store": "青岛百脑汇照材专卖店", "agent": "河南强视电子科技有限公司", "province": "华东-山东", "count": 2, "sales": 20194.0, "drone_units": 1.0, "wechat": 20.0, "participants": 43.0}, {"store": "唐山硅谷数码广场照材专卖店", "agent": "深圳市聚影联创科技有限公司", "province": "华北-河北", "count": 1, "sales": 18466.0, "drone_units": 7.0, "wechat": 70.0, "participants": 500.0}, {"store": "泰安三源照材专卖店", "agent": "河南强视电子科技有限公司", "province": "华东-山东", "count": 2, "sales": 16300.0, "drone_units": 7.0, "wechat": 35.0, "participants": 150.0}, {"store": "上海百脑汇照材专卖店", "agent": "上海贝来得数码影像有限公司", "province": "华东-上海", "count": 3, "sales": 15000.0, "drone_units": 2.0, "wechat": 42.0, "participants": 155.0}, {"store": "福州大利嘉城照材专卖店", "agent": "深圳市聚影联创科技有限公司", "province": "华东-福建", "count": 2, "sales": 13821.0, "drone_units": 4.0, "wechat": 208.0, "participants": 903.0}, {"store": "保定西大街照材专卖店", "agent": "深圳市聚影联创科技有限公司", "province": "华北-河北", "count": 9, "sales": 12867.0, "drone_units": 6.0, "wechat": 103.0, "participants": 191.0}], "prov_dist": [{"province": "华北-北京", "count": 1, "sales": 249661.0}, {"province": "华东-山东", "count": 16, "sales": 172549.1}, {"province": "东北-辽宁", "count": 8, "sales": 97324.3}, {"province": "西南-四川", "count": 12, "sales": 88467.0}, {"province": "未知", "count": 13, "sales": 80998.0}, {"province": "华东-福建", "count": 12, "sales": 53405.0}, {"province": "华中-湖南", "count": 9, "sales": 50091.1}, {"province": "华北-天津", "count": 4, "sales": 40000.0}, {"province": "华东-江苏", "count": 5, "sales": 38943.3}, {"province": "华东-上海", "count": 5, "sales": 37000.0}, {"province": "华北-河北", "count": 10, "sales": 31333.0}, {"province": "西南-重庆", "count": 3, "sales": 10497.0}, {"province": "西北-陕西", "count": 3, "sales": 7983.0}, {"province": "华中-湖北", "count": 2, "sales": 2798.0}, {"province": "西南-贵州", "count": 3, "sales": 2798.0}, {"province": "华中-河南", "count": 2, "sales": 2598.0}, {"province": "西北-甘肃", "count": 5, "sales": 0.0}], "channel_comparison": {"mall": {"count": 0, "sales": 0, "valid": 0, "drone_units": 0, "wechat": 0, "participants": 0, "avg_sales": 0}, "zhao": {"count": 113, "sales": 966445.8, "valid": 65, "drone_units": 59762.0, "wechat": 2773.0, "participants": 17473.0, "avg_sales": 8552.617699115044}}, "drone_comparison": {"drone": {"count": 60, "sales": 432036.8, "valid": 33, "drone_units": 59595.0, "wechat": 1307.0, "participants": 3713.0, "avg_sales": 7200.613333333333}, "non_drone": {"count": 53, "sales": 534409.0, "valid": 32, "drone_units": 167.0, "wechat": 1466.0, "participants": 13760.0, "avg_sales": 10083.188679245282}}, "cross_comparison": {"cross": {"count": 34, "sales": 103214.0, "valid": 18, "drone_units": 34.0, "wechat": 647.0, "participants": 3185.0, "avg_sales": 3035.705882352941}, "normal": {"count": 79, "sales": 863231.8, "valid": 47, "drone_units": 59728.0, "wechat": 2126.0, "participants": 14288.0, "avg_sales": 10926.984810126583}}, "brand_ranking": [{"brand": "崔克", "count": 2}, {"brand": "霸弗", "count": 1}, {"brand": "华为汽车", "count": 1}, {"brand": "淄博陶涛羽毛球俱乐部", "count": 1}, {"brand": "百脑汇", "count": 1}, {"brand": "厦门开元街道工会", "count": 1}, {"brand": "百脑汇，安防学院", "count": 1}, {"brand": "华为", "count": 1}, {"brand": "慈瑞体检，捷安特，丰田", "count": 1}, {"brand": "小鹏汽车", "count": 1}, {"brand": "绵阳建国汽车城", "count": 1}, {"brand": "ATP网球俱乐部", "count": 1}, {"brand": "索尼", "count": 1}, {"brand": "美沃斯", "count": 1}, {"brand": "华为荣耀", "count": 1}]}, "generated_at": "2026-07-23 21:44"};
+let currentFilter = 'all';
+
+function fmt(n) {
+  if (n === null || n === undefined) return '-';
+  if (typeof n !== 'number') n = parseFloat(n);
+  if (isNaN(n)) return '-';
+  if (n >= 10000000) return (n/10000000).toFixed(2) + '千万';
+  if (n >= 10000) return (n/10000).toFixed(2) + '万';
+  if (n >= 1000) return n.toLocaleString('zh-CN', {maximumFractionDigits: 0});
+  if (n % 1 !== 0) return n.toFixed(1);
+  return n.toString();
+}
+function fmtPct(n) {
+  if (n === null || n === undefined) return '-';
+  return (n * 100).toFixed(1) + '%';
+}
+function fmtRaw(n) {
+  if (n === null || n === undefined) return '-';
+  if (typeof n !== 'number') n = parseFloat(n);
+  if (isNaN(n)) return '-';
+  return Math.round(n).toLocaleString('zh-CN');
+}
+
+const COLORS = ['#2563eb','#10b981','#f59e0b','#8b5cf6','#ef4444','#06b6d4','#ec4899','#84cc16','#6366f1','#14b8a6'];
+
+function renderBar(containerId, labels, values, fmtFunc, color) {
+  const max = Math.max(...values, 1);
+  let html = '';
+  labels.forEach((label, i) => {
+    const v = values[i];
+    const pct = (v / max * 100);
+    const c = color || COLORS[i % COLORS.length];
+    html += `<div class="bar-row">
+      <div class="bar-label" title="${label}">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${c};">${pct > 15 ? fmtFunc(v) : ''}</div></div>
+      <div class="bar-value">${fmtFunc(v)}</div>
+    </div>`;
+  });
+  document.getElementById(containerId).innerHTML = html;
+}
+
+function renderTable(containerId, headers, rows, rowRenderer) {
+  let html = '<thead><tr>';
+  headers.forEach(h => {
+    const cls = h.align === 'right' ? 'text-right' : (h.align === 'center' ? 'text-center' : '');
+    html += `<th class="${cls}">${h.label}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+  rows.forEach((row, i) => {
+    html += rowRenderer(row, i);
+  });
+  html += '</tbody>';
+  document.getElementById(containerId).innerHTML = html;
+}
+
+function switchFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render() {
+  const d = DATA[currentFilter];
+  const ov = d.overview;
+
+  // Header
+  document.getElementById('gen-time').textContent = DATA.generated_at;
+  document.getElementById('total-count').textContent = ov.total;
+  document.getElementById('valid-count').textContent = ov.valid;
+
+  // KPI
+  const kpis = [
+    {label:'活动总场次', value: ov.total, unit:'场'},
+    {label:'活动销售总额', value: fmt(ov.total_sales), unit:'元'},
+    {label:'转化主机数量', value: fmtRaw(ov.total_drone_units), unit:'台'},
+    {label:'参与人数', value: fmtRaw(ov.total_participants), unit:'人'},
+    {label:'企微新增人数', value: fmtRaw(ov.total_wechat), unit:'人'},
+    {label:'有效活动数', value: ov.valid, unit:'场'},
+    {label:'平均单场销售额', value: fmt(ov.avg_sales), unit:'元'},
+    {label:'活动成交率', value: fmtPct(ov.conversion_rate), unit:''},
+  ];
+  document.getElementById('kpi-grid').innerHTML = kpis.map(k =>
+    `<div class="kpi-card"><div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}<span class="kpi-unit">${k.unit}</span></div></div>`
+  ).join('');
+
+  // Monthly cards
+  const months = ['2026-04','2026-05','2026-06'];
+  const monthLabels = {'2026-04':'4月','2026-05':'5月','2026-06':'6月'};
+  document.getElementById('monthly-grid').innerHTML = months.map(m => {
+    const md = d.monthly[m];
+    return `<div class="month-card"><h4>${monthLabels[m]}</h4>
+      <div class="month-stat"><span>活动场次</span><span>${md.count}场</span></div>
+      <div class="month-stat"><span>销售额</span><span>${fmt(md.sales)}元</span></div>
+      <div class="month-stat"><span>转化主机</span><span>${fmtRaw(md.drone_units)}台</span></div>
+      <div class="month-stat"><span>参与人数</span><span>${fmtRaw(md.participants)}人</span></div>
+      <div class="month-stat"><span>企微新增</span><span>${fmtRaw(md.wechat)}人</span></div>
+      <div class="month-stat"><span>有效活动</span><span>${md.valid}场</span></div>
+      <div class="month-stat"><span>成交率</span><span>${fmtPct(md.conversion_rate)}</span></div>
+      <div class="month-stat"><span>无人机活动</span><span>${md.drone_activities}场</span></div>
+    </div>`;
+  }).join('');
+
+  // Monthly bar charts
+  renderBar('monthly-bar', months.map(m=>monthLabels[m]), months.map(m=>d.monthly[m].count), fmt, '#2563eb');
+  // For sales, use dual axis - just show sales bars
+  renderBar('monthly-conv-bar', months.map(m=>monthLabels[m]), months.map(m=>d.monthly[m].wechat), fmtRaw, '#10b981');
+  renderBar('monthly-drone-bar', months.map(m=>monthLabels[m]), months.map(m=>d.monthly[m].drone_activities), fmt, '#f59e0b');
+
+  // Funnel
+  const funnelSteps = [
+    {label:'参与人数', value: ov.total_participants, color:'funnel-step-1', width:100},
+    {label:'企微添加', value: ov.total_wechat, color:'funnel-step-2', width: Math.max(ov.total_wechat/ov.total_participants*100, 20)},
+    {label:'转化主机', value: ov.total_drone_units, color:'funnel-step-3', width: Math.max(ov.total_drone_units/ov.total_participants*100, 15)},
+    {label:'有效活动', value: ov.valid, color:'funnel-step-4', width: Math.max(ov.valid/ov.total*100, 25)},
+  ];
+  document.getElementById('funnel').innerHTML = funnelSteps.map((s, i) => {
+    let html = `<div style="text-align:center;width:100%;">
+      <div class="funnel-step ${s.color}" style="width:${s.width}%;height:48px;border-radius:6px;margin:0 auto;">${fmtRaw(s.value)} ${s.label}</div>`;
+    if (i < funnelSteps.length - 1) {
+      const next = funnelSteps[i+1];
+      const rate = next.value / s.value * 100;
+      html += `<div class="funnel-label">&darr; 转化率 ${rate.toFixed(1)}%</div>`;
+    }
+    html += '</div>';
+    return html;
+  }).join('');
+
+  // Activity type bars
+  const types = d.type_metrics;
+  renderBar('type-sales-bar', types.map(t=>t.type), types.map(t=>t.sales), fmt);
+  renderBar('type-count-bar', types.map(t=>t.type), types.map(t=>t.count), fmt);
+
+  // Type monthly table
+  renderTable('type-monthly-table', 
+    [{label:'活动类型'},{label:'4月场次',align:'right'},{label:'4月销售额',align:'right'},{label:'5月场次',align:'right'},{label:'5月销售额',align:'right'},{label:'6月场次',align:'right'},{label:'6月销售额',align:'right'}],
+    types,
+    (row, i) => `<tr><td>${row.type}</td>
+      <td class="text-right">${d.type_monthly[row.type]['2026-04'].count}</td><td class="text-right">${fmt(d.type_monthly[row.type]['2026-04'].sales)}</td>
+      <td class="text-right">${d.type_monthly[row.type]['2026-05'].count}</td><td class="text-right">${fmt(d.type_monthly[row.type]['2026-05'].sales)}</td>
+      <td class="text-right">${d.type_monthly[row.type]['2026-06'].count}</td><td class="text-right">${fmt(d.type_monthly[row.type]['2026-06'].sales)}</td></tr>`
+  );
+
+  // Type wechat table
+  renderTable('type-wechat-table',
+    [{label:'活动类型'},{label:'企微新增',align:'right'},{label:'有效活动',align:'right'},{label:'有效率',align:'right'},{label:'平均企微/场',align:'right'}],
+    types,
+    (row, i) => `<tr><td>${row.type}</td>
+      <td class="text-right">${fmtRaw(row.wechat)}</td>
+      <td class="text-right">${row.valid}</td>
+      <td class="text-right">${fmtPct(row.valid_rate)}</td>
+      <td class="text-right">${fmtRaw(row.wechat/row.count)}</td></tr>`
+  );
+
+  // Type full table
+  renderTable('type-full-table',
+    [{label:'类型'},{label:'场次',align:'right'},{label:'有效活动',align:'right'},{label:'有效率',align:'right'},{label:'销售额',align:'right'},{label:'平均单场',align:'right'},{label:'转化主机',align:'right'},{label:'企微新增',align:'right'},{label:'参与人数',align:'right'},{label:'无人机活动',align:'right'}],
+    types,
+    (row, i) => `<tr><td>${row.type}</td>
+      <td class="text-right">${row.count}</td><td class="text-right">${row.valid}</td><td class="text-right">${fmtPct(row.valid_rate)}</td>
+      <td class="text-right">${fmt(row.sales)}</td><td class="text-right">${fmt(row.avg_sales)}</td>
+      <td class="text-right">${fmtRaw(row.drone_units)}</td><td class="text-right">${fmtRaw(row.wechat)}</td>
+      <td class="text-right">${fmtRaw(row.participants)}</td><td class="text-right">${row.drone_activities}</td></tr>`
+  );
+
+  // Product bar
+  const prods = d.product;
+  renderBar('product-bar', Object.keys(prods), Object.values(prods), fmtRaw);
+
+  // Product monthly table
+  renderTable('product-monthly-table',
+    [{label:'产品线'},{label:'4月',align:'right'},{label:'5月',align:'right'},{label:'6月',align:'right'},{label:'合计',align:'right'}],
+    Object.keys(prods),
+    (key, i) => `<tr><td>${key}</td>
+      <td class="text-right">${fmtRaw(d.product_monthly[key]['2026-04'])}</td>
+      <td class="text-right">${fmtRaw(d.product_monthly[key]['2026-05'])}</td>
+      <td class="text-right">${fmtRaw(d.product_monthly[key]['2026-06'])}</td>
+      <td class="text-right">${fmtRaw(prods[key])}</td></tr>`
+  );
+
+  // Product x Activity type table
+  renderTable('product-type-table',
+    [{label:'活动类型'},{label:'Luna',align:'right'},{label:'X系列',align:'right'},{label:'Go系列',align:'right'},{label:'Ace系列',align:'right'},{label:'合计',align:'right'}],
+    Object.keys(d.product_type_cross),
+    (key, i) => {
+      const v = d.product_type_cross[key];
+      const total = v['Luna']+v['X系列']+v['Go系列']+v['Ace系列'];
+      return `<tr><td>${key}</td>
+        <td class="text-right">${fmtRaw(v['Luna'])}</td>
+        <td class="text-right">${fmtRaw(v['X系列'])}</td>
+        <td class="text-right">${fmtRaw(v['Go系列'])}</td>
+        <td class="text-right">${fmtRaw(v['Ace系列'])}</td>
+        <td class="text-right">${fmtRaw(total)}</td></tr>`;
+    }
+  );
+
+  // Agent ranking
+  renderTable('agent-table',
+    [{label:'排名',align:'center'},{label:'代理商'},{label:'省区'},{label:'活动场次',align:'right'},{label:'有效',align:'right'},{label:'有效率',align:'right'},{label:'销售额',align:'right'},{label:'转化主机',align:'right'},{label:'企微新增',align:'right'},{label:'参与人数',align:'right'},{label:'单场销售额',align:'right'}],
+    d.agent_ranking,
+    (row, i) => {
+      const rankClass = i===0?'rank-1':(i===1?'rank-2':(i===2?'rank-3':''));
+      return `<tr><td class="text-center rank ${rankClass}">${i+1}</td>
+        <td>${row.agent}</td><td>${row.province}</td>
+        <td class="text-right">${row.count}</td><td class="text-right">${row.valid}</td><td class="text-right">${fmtPct(row.valid_rate)}</td>
+        <td class="text-right">${fmt(row.sales)}</td><td class="text-right">${fmtRaw(row.drone_units)}</td>
+        <td class="text-right">${fmtRaw(row.wechat)}</td><td class="text-right">${fmtRaw(row.participants)}</td>
+        <td class="text-right">${fmt(row.avg_sales)}</td></tr>`;
+    }
+  );
+
+  // Store ranking
+  renderTable('store-table',
+    [{label:'排名',align:'center'},{label:'门店名称'},{label:'代理商'},{label:'省区'},{label:'活动场次',align:'right'},{label:'销售额',align:'right'},{label:'转化主机',align:'right'},{label:'企微新增',align:'right'},{label:'参与人数',align:'right'}],
+    d.store_ranking,
+    (row, i) => {
+      const rankClass = i===0?'rank-1':(i===1?'rank-2':(i===2?'rank-3':''));
+      return `<tr><td class="text-center rank ${rankClass}">${i+1}</td>
+        <td>${row.store}</td><td>${row.agent}</td><td>${row.province}</td>
+        <td class="text-right">${row.count}</td><td class="text-right">${fmt(row.sales)}</td>
+        <td class="text-right">${fmtRaw(row.drone_units)}</td><td class="text-right">${fmtRaw(row.wechat)}</td>
+        <td class="text-right">${fmtRaw(row.participants)}</td></tr>`;
+    }
+  );
+
+  // Province bars
+  renderBar('prov-sales-bar', d.prov_dist.slice(0,15).map(p=>p.province), d.prov_dist.slice(0,15).map(p=>p.sales), fmt);
+  renderBar('prov-count-bar', d.prov_dist.slice(0,15).map(p=>p.province), d.prov_dist.slice(0,15).map(p=>p.count), fmt);
+
+  // Channel comparison
+  const cc = d.channel_comparison;
+  document.getElementById('mall-vs-zhao').innerHTML = `<h4>Mall店 vs 照材店</h4>` +
+    [['活动场次','count'],['销售额','sales'],['有效活动','valid'],['转化主机','drone_units'],['企微新增','wechat'],['参与人数','participants'],['平均单场销售额','avg_sales']].map(([label,key]) =>
+      `<div class="compare-stat"><span>${label}</span><span>Mall ${fmt(cc.mall[key])} | 照材 ${fmt(cc.zhao[key])}</span></div>`
+    ).join('');
+
+  const dc = d.drone_comparison;
+  document.getElementById('drone-vs-nondrone').innerHTML = `<h4>无人机 vs 非无人机活动</h4>` +
+    [['活动场次','count'],['销售额','sales'],['有效活动','valid'],['转化主机','drone_units'],['企微新增','wechat'],['参与人数','participants'],['平均单场销售额','avg_sales']].map(([label,key]) =>
+      `<div class="compare-stat"><span>${label}</span><span>无人机 ${fmt(dc.drone[key])} | 非无人机 ${fmt(dc.non_drone[key])}</span></div>`
+    ).join('');
+
+  const xc = d.cross_comparison;
+  document.getElementById('cross-vs-normal').innerHTML = `<h4>异业合作 vs 普通活动</h4>` +
+    [['活动场次','count'],['销售额','sales'],['有效活动','valid'],['转化主机','drone_units'],['企微新增','wechat'],['参与人数','participants'],['平均单场销售额','avg_sales']].map(([label,key]) =>
+      `<div class="compare-stat"><span>${label}</span><span>异业 ${fmt(xc.cross[key])} | 普通 ${fmt(xc.normal[key])}</span></div>`
+    ).join('');
+
+  // Brand ranking
+  document.getElementById('brand-ranking').innerHTML = d.brand_ranking.length > 0 ?
+    d.brand_ranking.map((b,i) => `<div class="compare-stat"><span>${i+1}. ${b.brand}</span><span>${b.count}次</span></div>`).join('') :
+    '<div style="color:var(--text-sub);font-size:13px;">暂无异业合作品牌数据</div>';
+
+  // Conclusion
+  const ov2 = d.overview;
+  const mallPct = cc.mall.count / ov2.total * 100;
+  const zhaoPct = cc.zhao.count / ov2.total * 100;
+  const dronePct = dc.drone.count / ov2.total * 100;
+  const crossPct = xc.cross.count / ov2.total * 100;
+  const topType = d.type_metrics[0];
+  const topProduct = Object.entries(d.product).sort((a,b)=>b[1]-a[1])[0];
+  
+  let filterName = currentFilter === 'all' ? '全部渠道' : (currentFilter === 'mall' ? 'Mall商' : '照材商');
+  
+  document.getElementById('conclusion').innerHTML = `
+    <p><strong>1. 整体经营：</strong>${filterName}Q2共开展活动 ${ov2.total} 场，有效活动 ${ov2.valid} 场，整体成交率 ${fmtPct(ov2.conversion_rate)}。活动销售总额 ${fmt(ov2.total_sales)} 元，平均单场销售额 ${fmt(ov2.avg_sales)} 元。</p>
+    <p><strong>2. 月度趋势：</strong>4月 ${d.monthly['2026-04'].count} 场、5月 ${d.monthly['2026-05'].count} 场、6月 ${d.monthly['2026-06'].count} 场，${d.monthly['2026-06'].count >= d.monthly['2026-04'].count ? '呈逐月增长态势' : '月度间有波动'}。6月销售额 ${fmt(d.monthly['2026-06'].sales)} 元为季度${d.monthly['2026-06'].sales >= d.monthly['2026-04'].sales ? '最高' : '需关注'}。</p>
+    <p><strong>3. 活动类型：</strong>${topType.type}场次最多(${topType.count}场)，销售额 ${fmt(topType.sales)} 元。有效率最高的活动类型值得关注。</p>
+    <p><strong>4. 产品线：</strong>${topProduct[0]}销量最高(${fmtRaw(topProduct[1])}台)，各产品线月度趋势需持续关注库存与供需匹配。</p>
+    <p><strong>5. 渠道结构：</strong>Mall商占比 ${fmtPct(mallPct/100)}，照材商占比 ${fmtPct(zhaoPct/100)}。${cc.mall.avg_sales > cc.zhao.avg_sales ? 'Mall商平均单场销售额高于照材商' : '照材商平均单场销售额高于Mall商'}。</p>
+    <p><strong>6. 无人机活动：</strong>无人机活动占比 ${fmtPct(dronePct/100)}，${dc.drone.avg_sales > dc.non_drone.avg_sales ? '无人机活动平均单场销售额显著高于非无人机活动' : '需加强无人机活动的销售转化'}。</p>
+    <p><strong>7. 异业合作：</strong>异业合作活动占比 ${fmtPct(crossPct/100)}，${xc.cross.avg_sales > xc.normal.avg_sales ? '异业合作平均单场表现优于普通活动' : '异业合作的销售转化有待提升'}。</p>
+    <p><strong>Q3 建议：</strong></p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;1) 加大高有效率活动类型的投入，优化低效活动类型；</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2) 针对Top代理商和Top门店复制成功经验，提升尾部门店活跃度；</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;3) 加强企微蓄水到销售转化的链路运营，提升加微到成交的转化率；</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;4) 无人机活动销售表现${dc.drone.avg_sales > dc.non_drone.avg_sales ? '优异' : '有提升空间'}，建议${dc.drone.avg_sales > dc.non_drone.avg_sales ? '扩大无人机活动覆盖' : '优化无人机活动场景设计'}；</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;5) 持续拓展优质异业合作品牌，提升资源置换效率。</p>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
