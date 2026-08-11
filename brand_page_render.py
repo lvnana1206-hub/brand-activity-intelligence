@@ -1,3 +1,4 @@
+from __future__ import annotations
 import html
 import json
 from datetime import date
@@ -108,7 +109,7 @@ def row_is_clickable(row: dict) -> bool:
     return bool(row.get("source_url")) and row.get("link_type") != "invalid"
 
 
-def row_link_html(row: dict, title: str | None = None) -> str:
+def row_link_html(row: dict, title=None) -> str:
     text = html.escape(title or row["activity_name"])
     if row_is_clickable(row):
         return f"<a href='{html.escape(row['source_url'])}' target='_blank' rel='noreferrer'>{text}</a>"
