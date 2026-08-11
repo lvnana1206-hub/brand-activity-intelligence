@@ -1,3 +1,4 @@
+from __future__ import annotations
 BRAND_META = {
     "DJI": ("大疆", "DJI"),
     "Apple": ("苹果", "Apple"),
